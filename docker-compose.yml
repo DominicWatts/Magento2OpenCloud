@@ -109,6 +109,9 @@ services:
   elasticsearch:
     image: 'domw/magento2-cloud-elasticsearch:7.6'
     restart: 'always'
+    volumes:
+      - './.docker/elasticsearch/data:/usr/share/elasticsearch/data:rw,delegated'
+      - './.docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:rw,delegated'
     networks:
       magento:
         aliases:
