@@ -1,0 +1,9 @@
+cluster.name: "docker-cluster"
+network.host: 0.0.0.0
+xpack.security.enabled: false
+discovery.type: single-node
+cluster.routing.allocation.disk.threshold_enabled: false
+cluster.routing.allocation.disk.watermark.low: 100gb
+cluster.routing.allocation.disk.watermark.high: 50gb
+cluster.routing.allocation.disk.watermark.flood_stage: 10gb
+cluster.info.update.interval: 1m
