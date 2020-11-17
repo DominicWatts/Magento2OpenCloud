@@ -173,3 +173,13 @@ generic:
       - MAGENTO_RUN_MODE=default
       - 'PHP_EXTENSIONS=bcmath bz2 calendar exif gd gettext intl mysqli pcntl pdo_mysql soap sockets sysvmsg sysvsem sysvshm opcache zip redis xsl ioncube'
 ```
+
+### Elasticsearch
+
+How to disable ElasticSearch disk quota / watermark
+
+Find elasticsearch container
+
+    docker exec -it ffbcd5a4e1b8 bash
+
+    curl -XPUT -H "Content-Type: application/json" http://localhost:9200/_all/_settings -d '{"index.blocks.read_only_allow_delete": null}'

@@ -43,7 +43,7 @@ services:
       db:
         condition: service_healthy 
   web:
-    image: 'magento/magento-cloud-docker-nginx:1.9-1.2'
+    image: 'domw/magento2-cloud-nginx:1.17'
     extends: generic
     ports:
       - 80:80
@@ -69,7 +69,7 @@ services:
         condition: service_started
   fpm:
     hostname: fpm.magento2.docker
-    image: 'magento/magento-cloud-docker-php:7.3-fpm-1.2.0'
+    image: 'domw/magento2-cloud-php:7.3-fpm'
     extends: generic
     restart: 'always'
     ports:
@@ -91,7 +91,7 @@ services:
       db:
         condition: service_healthy
   cli:
-    image: 'magento/magento-cloud-docker-php:7.3-cli-1.2.0'
+    image: 'domw/magento2-cloud-php:7.3-cli'
     extends: generic
     hostname: cli.magento2.docker
     depends_on:
@@ -107,8 +107,11 @@ services:
         aliases:
           - cli.magento2.docker
   elasticsearch:
-    image: 'magento/magento-cloud-docker-elasticsearch:7.7-1.2.0'
+    image: 'domw/magento2-cloud-elasticsearch:7.6'
     restart: 'always'
+    volumes:
+      - './.docker/elasticsearch/data:/usr/share/elasticsearch/data:rw,delegated'
+      - './.docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:rw,delegated'
     networks:
       magento:
         aliases:
@@ -118,7 +121,7 @@ services:
       - 9300:9300                         
   # cron:
   #   hostname: cron.magento2.docker
-  #   image: 'magento/magento-cloud-docker-php:7.3-cli-1.2.0'
+  #   image: 'domw/magento2-cloud-php:7.2-cli'
   #   extends: generic
   #   command: run-cron
   #   environment:
@@ -148,7 +151,7 @@ services:
   #     - magento
   generic:
     hostname: generic.magento2.docker
-    image: 'magento/magento-cloud-docker-php:7.3-cli-1.2.0'
+    image: 'domw/magento2-cloud-php:7.3-cli'
     environment:
       - MAGENTO_RUN_MODE=default
       - 'PHP_EXTENSIONS=bcmath bz2 calendar exif gd gettext intl mysqli pcntl pdo_mysql soap sockets sysvmsg sysvsem sysvshm opcache zip redis xsl ioncube'
