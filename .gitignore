@@ -1,4 +1,5 @@
 /.docker/bash/.bash_history
+/.docker/elasticsearch/data/
 /.docker/mysql/data/
 /app
 /bin
