@@ -10,7 +10,7 @@ services:
       - MYSQL_PASSWORD=magento2
     hostname: db.magento2.docker
     ports:
-      - '3306'
+      - '3306:3306'
     healthcheck:
       test: 'mysqladmin ping -h localhost -pmagento2'
       interval: 30s
