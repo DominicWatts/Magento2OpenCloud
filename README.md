@@ -18,6 +18,8 @@ Image builds are found here:
 
 [Github](https://github.com/magento/magento-cloud-docker)
 
+## Start with Quickstart
+
 [Quickstart Guide](QUICKSTART.md)
 
 ## Usage
