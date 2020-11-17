@@ -1,0 +1,11 @@
+/.docker/bash/.bash_history
+/.docker/mysql/data/
+/app
+/generated
+/pub
+/var
+/vendor
+*.sql
+*.zip
+*.tar
+*.tar.gz

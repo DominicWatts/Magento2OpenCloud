@@ -1,0 +1,157 @@
+version: '2.1'
+services:
+  db:
+    image: 'mariadb:10.4'
+    restart: 'always'
+    environment:
+      - MYSQL_ROOT_PASSWORD=magento2
+      - MYSQL_DATABASE=magento2
+      - MYSQL_USER=magento2
+      - MYSQL_PASSWORD=magento2
+    hostname: db.magento2.docker
+    ports:
+      - '3306'
+    healthcheck:
+      test: 'mysqladmin ping -h localhost -pmagento2'
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    command: '--auto_increment_increment=3 --auto_increment_offset=2'
+    networks:
+      magento:
+        aliases:
+          - db.magento2.docker
+    volumes:
+      - ./.docker/mysql/data:/var/lib/mysql
+      - ./.docker/mysql/conf:/etc/mysql/conf.d
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: 'always'
+    ports:
+      - 8000:80
+    networks:
+      magento:
+        aliases:
+          - phpmyadmin.magento2.docker    
+    links: 
+      - db:db
+    environment:
+      - MYSQL_USER=magento2
+      - MYSQL_PASSWORD=magento2
+      - MYSQL_ROOT_PASSWORD=magento2
+    depends_on:
+      db:
+        condition: service_healthy 
+  web:
+    image: 'magento/magento-cloud-docker-nginx:1.9-1.2'
+    extends: generic
+    ports:
+      - 80:80
+      - 443:443
+    hostname: web.magento2.docker
+    restart: 'always'
+    depends_on:
+      - fpm
+    volumes:
+      - '.:/app:ro,delegated'
+      - './generated:/app/generated:rw,delegated'
+      - './var:/app/var:rw,delegated'
+      - './app/etc:/app/app/etc:rw,delegated'
+      - './pub/media:/app/pub/media:rw,delegated'
+      - './pub/static:/app/pub/static:rw,delegated'
+      - './vendor:/app/vendor:ro,delegated'
+    networks:
+      magento:
+        aliases:
+          - web.magento2.docker
+    depends_on:
+      fpm:
+        condition: service_started
+  fpm:
+    hostname: fpm.magento2.docker
+    image: 'magento/magento-cloud-docker-php:7.3-fpm-1.2.0'
+    extends: generic
+    restart: 'always'
+    ports:
+      - '9000'
+    volumes:
+      - '.:/app:ro,delegated'
+      - './generated:/app/generated:rw,delegated'
+      - './var:/app/var:rw,delegated'
+      - './app/etc:/app/app/etc:rw,delegated'
+      - './pub/media:/app/pub/media:rw,delegated'
+      - './pub/static:/app/pub/static:rw,delegated'
+      - './vendor:/app/vendor:ro,delegated'
+      - './.docker/newrelic/newrelic.ini:/usr/local/etc/php/conf.d/newrelic.ini'
+    networks:
+      magento:
+        aliases:
+          - fpm.magento2.docker
+    depends_on:
+      db:
+        condition: service_healthy
+  cli:
+    image: 'magento/magento-cloud-docker-php:7.3-cli-1.2.0'
+    extends: generic
+    hostname: cli.magento2.docker
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - '.:/app:rw,delegated'      
+      - '~/.composer/cache:/root/.composer/cache:rw,delegated'
+      - './.docker/newrelic/newrelic.ini:/usr/local/etc/php/conf.d/newrelic.ini'
+      - './.docker/bash/.bash_history:/root/.bash_history:rw,delegated'
+    networks:
+      magento:
+        aliases:
+          - cli.magento2.docker
+  elasticsearch:
+    image: 'magento/magento-cloud-docker-elasticsearch:7.7-1.2.0'
+    restart: 'always'
+    networks:
+      magento:
+        aliases:
+          - elasticsearch.magento2.docker
+    ports:
+      - 9200:9200
+      - 9300:9300                         
+  # cron:
+  #   hostname: cron.magento2.docker
+  #   image: 'domw/magento2-cloud-php:7.2-cli'
+  #   extends: generic
+  #   command: run-cron
+  #   environment:
+  #     CRONTAB: '* * * * * root cd /app && /usr/local/bin/php bin/magento cron:run >> /app/var/log/cron.log'
+  #   volumes:
+  #     - '.:/app:ro,delegated'
+  #     - './generated:/app/generated:rw,delegated'
+  #     - './var:/app/var:rw,delegated'
+  #     - './app/etc:/app/app/etc:rw,delegated'
+  #     - './pub/media:/app/pub/media:rw,delegated'
+  #     - './pub/static:/app/pub/static:rw,delegated'
+  #   networks:
+  #     magento:
+  #       aliases:
+  #         - cron.magento2.docker
+  # mail:
+  #   hostname: mailhog.magento2.docker
+  #   image: mailhog/mailhog:latest
+  #   restart: 'always'
+  #   ports:
+  #     - 1025:1025
+  #     - 8025:8025
+  #   links:
+  #     - fpm
+  #     - db
+  #   networks:
+  #     - magento
+  generic:
+    hostname: generic.magento2.docker
+    image: 'magento/magento-cloud-docker-php:7.3-cli-1.2.0'
+    environment:
+      - MAGENTO_RUN_MODE=default
+      - 'PHP_EXTENSIONS=bcmath bz2 calendar exif gd gettext intl mysqli pcntl pdo_mysql soap sockets sysvmsg sysvsem sysvshm opcache zip redis xsl ioncube'
+networks:
+  magento:
+    driver: bridge
