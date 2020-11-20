@@ -2,7 +2,9 @@
 /.docker/elasticsearch/data/
 /.docker/mysql/data/
 /app
-/bin
+/bin/*
+!/bin/_config
+!/bin/local-*
 /dev
 /generated
 /lib
