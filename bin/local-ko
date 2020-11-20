@@ -1,0 +1,5 @@
+#!/bin/sh
+
+read COMPOSE < ./bin/_config
+docker-compose -f $COMPOSE run --rm cli magento-command xigen:clearstatic:clear -c
+docker-compose -f $COMPOSE run --rm cli magento-command setup:static-content:deploy -f en_US
