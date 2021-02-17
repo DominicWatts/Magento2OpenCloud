@@ -1,4 +1,0 @@
-#!/bin/sh
-
-read COMPOSE < ./bin/_config
-docker-compose -f $COMPOSE exec db sh -c 'mysql -u magento2 -pmagento2 magento2 "$@"'
