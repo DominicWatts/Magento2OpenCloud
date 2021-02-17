@@ -36,6 +36,12 @@ Copy newrelic.sample.ini config file to newrelic.ini and add new tokens if requi
 
     cp .docker/newrelic/newrelic.sample.ini .docker/newrelic/newrelic.ini
 
+Fix permissions
+
+    sudo chmod 777 .docker/mysql .docker/elasticsearch -R
+
+Note: Confirm any subfolder(s)
+
 Start Docker
 
     docker compose up -d
