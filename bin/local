@@ -1,6 +1,6 @@
 #!/bin/bash
 
-read COMPOSE < ./bin/local_config
+COMPOSE=docker-compose.yml
 locales=(en_GB en_US)
 
 USAGE="Local Docker
