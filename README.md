@@ -48,6 +48,12 @@ Image builds are found here:
 
 ## Usage
 
+### Helper script
+
+    ./bin/local
+    
+### Getting started
+
 Extract Magento open source to `./`
 
 ### Generic
