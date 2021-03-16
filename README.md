@@ -174,7 +174,7 @@ PHP settings can be adjusted via
 ```yml
 generic:
     hostname: generic.magento2.docker
-    image: 'magento/magento-cloud-docker-php:7.3-cli-1.2.0'
+    image: 'domw/magento2-cloud-php:7.3-cli'
     environment:
       - MAGENTO_RUN_MODE=default
       - 'PHP_EXTENSIONS=bcmath bz2 calendar exif gd gettext intl mysqli pcntl pdo_mysql soap sockets sysvmsg sysvsem sysvshm opcache zip redis xsl ioncube'
