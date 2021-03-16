@@ -2,7 +2,7 @@
 
 ## 1 Fetch from git
 
-git clone git@github.com:DominicWatts/Magento2CloudDocker.git ./
+git clone git@github.com:DominicWatts/Magento2OpenDocker.git ./
 
 ## 2 Add the following entry to OS hosts file
 
