@@ -4,6 +4,10 @@
 
 git clone git@github.com:DominicWatts/Magento2OpenDocker.git ./
 
+### To use unofficial images
+
+git checkout unofficial-images
+
 ## 2 Add the following entry to OS hosts file
 
     127.0.0.1 magento2.docker
