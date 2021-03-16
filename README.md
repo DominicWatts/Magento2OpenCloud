@@ -106,7 +106,7 @@ Or specific config
 ```yml
   cron:
     hostname: cron.magento2.docker
-    image: 'magento/magento-cloud-docker-php:7.3-cli-1.2.0'
+    image: 'domw/magento2-cloud-php:7.2-cli'
     extends: generic
     command: run-cron
     environment:
