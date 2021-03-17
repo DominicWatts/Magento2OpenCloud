@@ -122,6 +122,7 @@ services:
   redis:
     hostname: redis.magento2.docker
     image: 'redis:5.0'
+    restart: 'always'
     volumes:
       - '.:/app:rw,delegated'
     ports:
