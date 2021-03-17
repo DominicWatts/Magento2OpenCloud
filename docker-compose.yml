@@ -118,7 +118,23 @@ services:
           - elasticsearch.magento2.docker
     ports:
       - 9200:9200
-      - 9300:9300                         
+      - 9300:9300
+  redis:
+    hostname: redis.magento2.docker
+    image: 'redis:5.0'
+    volumes:
+      - '.:/app:rw,delegated'
+    ports:
+      - 6379
+    healthcheck:
+      test: 'redis-cli ping || exit 1'
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      magento:
+        aliases:
+          - redis.magento2.docker           
   # cron:
   #   hostname: cron.magento2.docker
   #   image: 'domw/magento2-cloud-php:7.2-cli'
