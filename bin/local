@@ -6,8 +6,9 @@ locales=(en_GB en_US)
 USAGE="Local Docker
 
 \033[33mArguments:\033[0m
-  up                Destroy, re-create and start containers
+  up                Create and start containers
   down              Destroy containers
+  init              Destroy, re-create and start containers and volumes
   
   pull              Pull latest images
   stop              Stop containers
@@ -43,12 +44,20 @@ fi;
 
 case "$1" in
     up)
-        docker-compose -f $COMPOSE down -v --remove-orphans
-        docker-compose -f $COMPOSE up -d --remove-orphans
+        docker-compose -f $COMPOSE up -d
         ;;
     down)
-        docker-compose -f $COMPOSE down -v --remove-orphans
+        docker-compose -f $COMPOSE down --remove-orphans
         ;;
+    init)
+        read -p "Any existing data volumes will be removed. Are you sure? [y/N] " -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            docker-compose -f $COMPOSE down -v --remove-orphans
+            docker-compose -f $COMPOSE up -d
+        fi
+        ;;        
     pull)
         docker-compose -f $COMPOSE pull
         ;;
